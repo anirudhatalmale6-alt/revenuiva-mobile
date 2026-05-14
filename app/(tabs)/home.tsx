@@ -154,6 +154,23 @@ export default function HomeScreen() {
           ))}
         </View>
 
+        {business?.mobile_app_link_url ? (
+          <TouchableOpacity
+            style={[styles.dealsBanner, { backgroundColor: primaryColor }]}
+            activeOpacity={0.85}
+            onPress={() => Linking.openURL(business.mobile_app_link_url!)}
+          >
+            <Text style={styles.dealsBannerEmoji}>{'\u{1F381}'}</Text>
+            <View style={styles.dealsBannerText}>
+              <Text style={styles.dealsBannerTitle}>
+                {business.mobile_app_link_label || 'Deals & Offers'}
+              </Text>
+              <Text style={styles.dealsBannerSub}>Tap to view</Text>
+            </View>
+            <Text style={styles.dealsBannerArrow}>{'\u{2192}'}</Text>
+          </TouchableOpacity>
+        ) : null}
+
         {appointments.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
@@ -314,6 +331,39 @@ const styles = StyleSheet.create({
   statLabel: {
     ...Typography.bodySm,
     color: Colors.textSecondary,
+  },
+  dealsBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 16,
+    padding: Spacing.lg,
+    marginBottom: Spacing.xxl,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  dealsBannerEmoji: {
+    fontSize: 32,
+    marginRight: Spacing.md,
+  },
+  dealsBannerText: {
+    flex: 1,
+  },
+  dealsBannerTitle: {
+    ...Typography.h3,
+    color: Colors.white,
+  },
+  dealsBannerSub: {
+    ...Typography.bodySm,
+    color: 'rgba(255,255,255,0.8)',
+    marginTop: 2,
+  },
+  dealsBannerArrow: {
+    fontSize: 22,
+    color: Colors.white,
+    marginLeft: Spacing.sm,
   },
   section: {
     marginBottom: Spacing.xxl,

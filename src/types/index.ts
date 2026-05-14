@@ -19,6 +19,8 @@ export interface Business {
   default_deposit_amount: number;
   cancellation_hours: number;
   voucher_validation_enabled: boolean;
+  mobile_app_link_url: string | null;
+  mobile_app_link_label: string | null;
 }
 
 export interface Customer {
