@@ -138,33 +138,37 @@ export default function MessagesScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={0}
       >
-        {messages.length === 0 ? (
-          <EmptyState
-            icon={'💬'}
-            title="No Messages Yet"
-            subtitle={`Start a conversation with ${businessName}`}
-          />
-        ) : (
-          <FlatList
-            ref={listRef}
-            data={messages}
-            keyExtractor={(item) => String(item.id)}
-            renderItem={renderMessage}
-            contentContainerStyle={styles.messageList}
-            showsVerticalScrollIndicator={false}
-            onContentSizeChange={() => {
-              listRef.current?.scrollToEnd({ animated: false });
-            }}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                tintColor={Colors.primary}
-                colors={[Colors.primary]}
+        <View style={styles.flex}>
+          {messages.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <EmptyState
+                icon={'💬'}
+                title="No Messages Yet"
+                subtitle={`Start a conversation with ${businessName}`}
               />
-            }
-          />
-        )}
+            </View>
+          ) : (
+            <FlatList
+              ref={listRef}
+              data={messages}
+              keyExtractor={(item) => String(item.id)}
+              renderItem={renderMessage}
+              contentContainerStyle={styles.messageList}
+              showsVerticalScrollIndicator={false}
+              onContentSizeChange={() => {
+                listRef.current?.scrollToEnd({ animated: false });
+              }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  tintColor={Colors.primary}
+                  colors={[Colors.primary]}
+                />
+              }
+            />
+          )}
+        </View>
 
         <View style={styles.inputBar}>
           <View style={styles.inputWrapper}>
@@ -243,6 +247,11 @@ const styles = StyleSheet.create({
   headerSpacer: {
     width: 40,
   },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   messageList: {
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.lg,
@@ -301,11 +310,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    paddingTop: Spacing.md,
+    paddingBottom: Spacing.xl,
     backgroundColor: Colors.surface,
     borderTopWidth: 1,
     borderTopColor: Colors.border,
     gap: Spacing.sm,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 4,
   },
   inputWrapper: {
     flex: 1,
