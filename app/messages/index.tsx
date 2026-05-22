@@ -28,12 +28,19 @@ export default function MessagesScreen() {
   const [inputText, setInputText] = useState('');
   const [sending, setSending] = useState(false);
   const listRef = useRef<FlatList>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lastCountRef = useRef(0);
 
   const fetchMessages = useCallback(async () => {
     try {
       const res = await getMessages();
-      const data: Message[] = res.data?.data ?? res.data ?? [];
-      setMessages(data.slice().reverse());
+      const data: Message[] = res.data?.messages ?? res.data?.data ?? res.data ?? [];
+      const sorted = data.slice().reverse();
+      setMessages(sorted);
+      if (sorted.length > lastCountRef.current && lastCountRef.current > 0) {
+        setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
+      }
+      lastCountRef.current = sorted.length;
     } catch {
       setMessages([]);
     } finally {
@@ -45,6 +52,10 @@ export default function MessagesScreen() {
 
   useEffect(() => {
     fetchMessages();
+    pollRef.current = setInterval(fetchMessages, 5000);
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
   }, [fetchMessages]);
 
   const handleSend = useCallback(async () => {
