@@ -139,7 +139,17 @@ export default function BookScreen() {
         }
         const res = await getSlots(params as any);
         const payload = res.data.data ?? res.data;
-        setSlots(payload.slots ?? payload ?? []);
+        const rawSlots = payload.slots ?? payload ?? [];
+        const normalized = rawSlots.map((s: any) => {
+          if (typeof s === 'string') {
+            const [h, m] = s.split(':').map(Number);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+            return { time: s, display: `${h12}:${m.toString().padStart(2, '0')} ${ampm}` };
+          }
+          return s;
+        });
+        setSlots(normalized);
       } catch {
         setSlots([]);
       } finally {

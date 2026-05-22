@@ -272,6 +272,19 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </Animated.View>
 
+          <TouchableOpacity
+            style={styles.registerLink}
+            onPress={() => router.push('/(auth)/register')}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.registerText}>
+              New customer?{' '}
+              <Text style={[styles.registerHighlight, themed.accentText]}>
+                Create Account
+              </Text>
+            </Text>
+          </TouchableOpacity>
+
           <View style={styles.footer}>
             <Text style={styles.footerText}>
               By continuing, you agree to our Terms of Service
@@ -412,6 +425,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: Spacing.xxl,
     paddingBottom: Spacing.lg,
+  },
+  registerLink: {
+    alignItems: 'center',
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.sm,
+  },
+  registerText: {
+    ...Typography.body,
+    color: Colors.textSecondary,
+  },
+  registerHighlight: {
+    fontWeight: '700',
   },
   footerText: {
     ...Typography.bodySm,

@@ -15,6 +15,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Colors, Spacing, Typography } from '../../src/theme';
 import { Button } from '../../src/components';
 import { verifyCode, sendCode } from '../../src/api/auth';
+import { updateProfile } from '../../src/api/customer';
 import { useAuth } from '../../src/contexts/AuthContext';
 import { useBrand } from '../../src/contexts/BrandContext';
 
@@ -28,6 +29,9 @@ export default function VerifyScreen() {
     phone: string;
     is_new_customer: string;
     has_password: string;
+    first_name: string;
+    last_name: string;
+    email: string;
   }>();
   const phone = params.phone || '';
 
@@ -91,6 +95,15 @@ export default function VerifyScreen() {
         const { data } = await verifyCode(phone, otp);
         if (data.success && data.token && data.customer) {
           await auth.login(data.token, data.customer);
+          if (params.first_name) {
+            try {
+              await updateProfile({
+                first_name: params.first_name,
+                last_name: params.last_name || '',
+                email: params.email || '',
+              });
+            } catch {}
+          }
           if (data.needs_profile || !data.customer.first_name) {
             router.replace('/(auth)/set-password');
           } else {
