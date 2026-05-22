@@ -287,7 +287,13 @@ export default function LoginScreen() {
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>
-              By continuing, you agree to our Terms of Service
+              By continuing, you agree to our{' '}
+              <Text
+                style={[styles.footerLink, themed.accentText]}
+                onPress={() => router.push('/terms')}
+              >
+                Terms of Service
+              </Text>
             </Text>
           </View>
         </ScrollView>
@@ -442,5 +448,9 @@ const styles = StyleSheet.create({
     ...Typography.bodySm,
     color: Colors.textTertiary,
     textAlign: 'center',
+  },
+  footerLink: {
+    fontWeight: '600',
+    textDecorationLine: 'underline',
   },
 });
