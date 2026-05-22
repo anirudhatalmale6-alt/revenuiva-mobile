@@ -158,7 +158,7 @@ export default function HomeScreen() {
               onPress={handleLogout}
               activeOpacity={0.7}
             >
-              <Text style={styles.logoutIcon}>{'⏻'}</Text>
+              <Text style={styles.logoutText}>Logout</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -334,8 +334,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   logoutBtn: {
-    width: 38,
-    height: 38,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     borderRadius: 10,
     backgroundColor: Colors.surfaceVariant,
     alignItems: 'center',
@@ -343,9 +343,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.borderLight,
   },
-  logoutIcon: {
-    fontSize: 18,
-    color: Colors.textSecondary,
+  logoutText: {
+    ...Typography.bodySm,
+    color: Colors.error,
+    fontWeight: '600',
   },
   statsRow: {
     flexDirection: 'row',
