@@ -9,6 +9,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Linking,
+  Alert,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Colors, Spacing, Typography } from '../../src/theme';
@@ -31,7 +32,7 @@ interface DashboardData {
 }
 
 export default function HomeScreen() {
-  const { customer, business } = useAuth();
+  const { customer, business, logout } = useAuth();
   const { primaryColor, secondaryColor, logoUrl, businessName } = useBrand();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,20 @@ export default function HomeScreen() {
   }, [fetchData]);
 
   const [refreshing, onRefresh] = useRefresh(fetchData);
+
+  const handleLogout = useCallback(() => {
+    Alert.alert('Log Out', 'Are you sure you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Log Out',
+        style: 'destructive',
+        onPress: async () => {
+          await logout();
+          router.replace('/(auth)/login');
+        },
+      },
+    ]);
+  }, [logout]);
 
   const today = new Date();
   const dateString = today.toLocaleDateString('en-US', {
@@ -119,24 +134,33 @@ export default function HomeScreen() {
             </Text>
             <Text style={styles.date}>{dateString}</Text>
           </View>
-          {logoUrl ? (
-            <Image
-              source={{ uri: logoUrl }}
-              style={styles.logo}
-              resizeMode="contain"
-            />
-          ) : (
-            <View
-              style={[
-                styles.logoPlaceholder,
-                { backgroundColor: primaryColor + '15' },
-              ]}
+          <View style={styles.headerRight}>
+            {logoUrl ? (
+              <Image
+                source={{ uri: logoUrl }}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+            ) : (
+              <View
+                style={[
+                  styles.logoPlaceholder,
+                  { backgroundColor: primaryColor + '15' },
+                ]}
+              >
+                <Text style={[styles.logoText, { color: primaryColor }]}>
+                  {businessName.charAt(0)}
+                </Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.logoutBtn}
+              onPress={handleLogout}
+              activeOpacity={0.7}
             >
-              <Text style={[styles.logoText, { color: primaryColor }]}>
-                {businessName.charAt(0)}
-              </Text>
-            </View>
-          )}
+              <Text style={styles.logoutIcon}>{'⏻'}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.statsRow}>
@@ -288,6 +312,11 @@ const styles = StyleSheet.create({
     ...Typography.body,
     color: Colors.textSecondary,
   },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
   logo: {
     width: 44,
     height: 44,
@@ -303,6 +332,20 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 20,
     fontWeight: '700',
+  },
+  logoutBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    backgroundColor: Colors.surfaceVariant,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.borderLight,
+  },
+  logoutIcon: {
+    fontSize: 18,
+    color: Colors.textSecondary,
   },
   statsRow: {
     flexDirection: 'row',
