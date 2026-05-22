@@ -68,12 +68,10 @@ export default function HomeScreen() {
     ]);
   }, [logout]);
 
-  const businessTz = business?.timezone || 'America/New_York';
-  const dateString = new Date().toLocaleDateString('en-US', {
+  const dateString = (business as any)?.server_date || new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
-    timeZone: businessTz,
   });
 
   if (loading) return <LoadingScreen message="Loading dashboard..." />;
